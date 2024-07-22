@@ -12,6 +12,7 @@
 #include "esp_log.h"
 #include "esp_wifi.h"
 #include "esp_event.h"
+#include "nvs_flash.h"
 
 #define SSID         CONFIG_ESP_WIFI_SSID
 #define PWD          CONFIG_ESP_WIFI_PASSWORD
@@ -63,6 +64,17 @@ static void event_handler(void * arg, esp_event_base_t event_base,
         g_nretry = 0;
         xEventGroupSetBits(g_wifi_event_group, WIFI_CONNECTED_BIT);
     }
+}
+
+void init_nvs() {
+    // Initialize NVS to store WiFi configuration
+    ESP_LOGI(TAG, "Initializing non-volatile storage");
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
 }
 
 void init_wifi() {
@@ -131,5 +143,6 @@ void init_wifi() {
 
 void app_main(void) {
     ESP_LOGI(TAG, "Virtual remote keyboard is welcoming you!");
+    init_nvs();
     init_wifi();
 }
