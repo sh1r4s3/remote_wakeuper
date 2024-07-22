@@ -36,10 +36,6 @@ menu "WiFi configuration"
             bool "WPA2 PSK"
         config ESP_WIFI_AUTH_WPA_WPA2_PSK
             bool "WPA/WPA2 PSK"
-        config ESP_WIFI_AUTH_WPA3_PSK
-            bool "WPA3 PSK"
-        config ESP_WIFI_AUTH_WPA2_WPA3_PSK
-            bool "WPA2/WPA3 PSK"
         config ESP_WIFI_AUTH_WAPI_PSK
             bool "WAPI PSK"
     endchoice
