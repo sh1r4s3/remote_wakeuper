@@ -78,6 +78,8 @@ void init_nvs() {
 }
 
 void init_wifi() {
+    LOGI(TAG, "Initializing WiFi");
+
     g_wifi_event_group = xEventGroupCreate();
 
     ESP_ERROR_CHECK(esp_netif_init());
