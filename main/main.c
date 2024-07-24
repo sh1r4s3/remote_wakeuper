@@ -1,7 +1,6 @@
 /*
- * SPDX-FileCopyrightText: 2010-2022 Espressif Systems (Shanghai) CO LTD
- *
- * SPDX-License-Identifier: CC0-1.0
+ * Copyright (c) 2024 Nikita Ermakov <sh1r4s3@mail.si-head.nl>
+ * SPDX-License-Identifier: MIT
  */
 
 #include <stdint.h>
