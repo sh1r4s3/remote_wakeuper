@@ -236,4 +236,5 @@ void app_main(void) {
     init_nvs();
     init_wifi();
     init_usb();
+    usb_hid_loop();
 }
