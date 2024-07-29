@@ -53,6 +53,33 @@ static int g_nretry = 0;
 // FreeRTOS event group to signal when we are connected
 static EventGroupHandle_t g_wifi_event_group;
 
+// USB HID configuration
+const char *hid_string_descriptor[5] = {
+    // array of pointer to string descriptors
+    (char[]){0x09, 0x04},       // Is supported language is English (0x0409)
+    "sh1r4s3",                 // Manufacturer
+    "vkeyboard",               // Product
+    "424242",                  // Serials, should use chip ID
+    "Virtual ESP32 keyboard"   // HID
+};
+
+static const uint8_t hid_configuration_descriptor[] = {
+    TUD_CONFIG_DESCRIPTOR(1 /* configuration number */,
+                          1 /* interface count */,
+                          0 /* string index */,
+                          TUSB_DESC_TOTAL_LEN /* total length */,
+                          TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP /* attribute */,
+                          100 /* mA */),
+
+    TUD_HID_DESCRIPTOR(0 /* interface number */,
+                       4 /* string index */,
+                       false /* boot protocol */,
+                       sizeof(hid_report_descriptor) /* report descriptor len */,
+                       0x81 /* EP in address */,
+                       16 /* size */,
+                       10 /* polling interval */),
+};
+
 static void event_handler(void * arg, esp_event_base_t event_base,
                           int32_t event_id, void * event_data) {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
@@ -176,42 +203,15 @@ uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_t
 void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t const *buffer, uint16_t bufsize) {
 }
 
-
 void init_usb() {
     ESP_LOGI(TAG, "Initializing USB");
 
-    static const char *hid_string_descriptor[5] = {
-        // array of pointer to string descriptors
-        (char*){0x09, 0x04},       // Is supported language is English (0x0409)
-        "sh1r4s3",                 // Manufacturer
-        "vkeyboard",               // Product
-        "424242",                  // Serials, should use chip ID
-        "Virtual ESP32 keyboard",  // HID
-        0                          // End of array
-    };
-
-    static const uint8_t *hid_configuration_descriptor = {
-        TUD_CONFIG_DESCRIPTOR(1 /* configuration number */,
-                              1 /* interface count */,
-                              0 /* string index */,
-                              TUSB_DESC_TOTAL_LEN /* total length */,
-                              TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP /* attribute */,
-                              100 /* mA */),
-
-        TUD_HID_DESCRIPTOR(0 /* interface number */,
-                           4 /* string index */,
-                           false /* boot protocol */,
-                           sizeof(hid_report_descriptor) /* report descriptor len */,
-                           0x81 /* EP in address */,
-                           16 /* size */,
-                           10 /* polling interval */),
-    };
-
     const tinyusb_config_t tusb_cfg = {
-        .device_descriptor = NULL, // Use the default values from sdkconfig
+        .device_descriptor = NULL,
         .string_descriptor = hid_string_descriptor,
-        .external_phy = false, // Use internal PHY
-        .configuration_descriptor = hid_configuration_descriptor,
+        .string_descriptor_count = sizeof(hid_string_descriptor) / sizeof(hid_string_descriptor[0]),
+        .external_phy = false,
+        .configuration_descriptor = hid_configuration_descriptor
     };
 
     ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
