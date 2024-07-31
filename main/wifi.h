@@ -6,8 +6,6 @@
 #ifndef RKW_WIFI
 #define RKW_WIFI
 
-#include "class/hid/hid.h"
-
 void wifi_init();
 
 #endif
