@@ -6,6 +6,7 @@
 #include <esp_log.h>
 #include "wifi.h"
 #include "usb.h"
+#include "http.h"
 
 static const char * TAG = "RKW_MAIN";
 
@@ -13,5 +14,6 @@ void app_main() {
     ESP_LOGI(TAG, "Virtual remote keyboard is welcoming you!");
     wifi_init();
     usb_init();
+    http_init();
     usb_hid_wakeup_loop();
 }
