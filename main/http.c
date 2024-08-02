@@ -36,5 +36,8 @@ void http_init() {
 }
 
 esp_err_t uri_root_handler(httpd_req_t * request) {
+    const char * response = "Processed";
+    ESP_LOGI(TAG, "got a request for /");
+    httpd_resp_send(request, response, HTTPD_RESP_USE_STRLEN);
     return ESP_OK;
 }
