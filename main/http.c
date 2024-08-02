@@ -30,7 +30,8 @@ void http_init() {
     ESP_LOGI(TAG, "HTTP server has been started. Listening %d", http_config.server_port);
 
     for (int i = 0; i < sizeof(g_get_uris)/sizeof(g_get_uris[0]); ++i) {
-        ESP_ERROR_CHECK(httpd_register_uri_handler(&g_server_handle, g_get_uris + i));
+        ESP_LOGI(TAG, "Registering GET handler for %s", g_get_uris[i].uri);
+        ESP_ERROR_CHECK(httpd_register_uri_handler(g_server_handle, g_get_uris + i));
     }
 }
 
