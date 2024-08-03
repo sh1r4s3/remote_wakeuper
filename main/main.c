@@ -14,6 +14,6 @@ void app_main() {
     ESP_LOGI(TAG, "Virtual remote keyboard is welcoming you!");
     wifi_init();
     usb_init();
-    http_init();
+    http_init(usb_get_callback());
     usb_hid_wakeup_loop();
 }

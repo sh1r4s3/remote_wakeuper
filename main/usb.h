@@ -11,5 +11,6 @@
 void usb_init();
 int usb_send_data(uint8_t keycode);
 void usb_hid_wakeup_loop();
+void (*usb_get_callback(void))(void);
 
 #endif

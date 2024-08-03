@@ -5,6 +5,7 @@
 
 #include <esp_log.h>
 #include <esp_http_server.h>
+#include <stdlib.h>
 
 static const char * TAG = "RKW_HTTP";
 
@@ -20,10 +21,20 @@ static httpd_uri_t g_get_uris[] = {
     }
 };
 
-void http_init() {
+static void (*usb_callback)(void) = NULL;
+
+void http_init(void (*pfn)(void)) {
     ESP_LOGI(TAG, "Starting HTTP server");
     // Get the default HTTP server configuration
     httpd_config_t http_config = HTTPD_DEFAULT_CONFIG();
+
+    // Register a USB callback
+    if (pfn) {
+        usb_callback = pfn;
+    } else {
+        ESP_LOGE(TAG, "Pointer to a callback function is NULL");
+        abort();
+    }
 
     // Start HTTP server
     ESP_ERROR_CHECK(httpd_start(&g_server_handle, &http_config));
@@ -39,5 +50,6 @@ esp_err_t uri_root_handler(httpd_req_t * request) {
     const char * response = "Processed";
     ESP_LOGI(TAG, "got a request for /");
     httpd_resp_send(request, response, HTTPD_RESP_USE_STRLEN);
+    usb_callback();
     return ESP_OK;
 }

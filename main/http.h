@@ -6,6 +6,6 @@
 #ifndef RKW_HTTP
 #define RKW_HTTP
 
-void http_init();
+void http_init(void (*pfn)(void));
 
 #endif

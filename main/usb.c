@@ -50,6 +50,14 @@ static const uint8_t hid_configuration_descriptor[] = {
                        10 /* polling interval */),
 };
 
+static void usb_callback() {
+    ESP_LOGI(TAG, "USB callback");
+}
+
+void (*usb_get_callback(void))(void) {
+    return usb_callback;
+}
+
 void usb_init() {
     ESP_LOGI(TAG, "Initializing USB");
 
