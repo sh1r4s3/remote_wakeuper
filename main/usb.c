@@ -2,7 +2,7 @@
  * Copyright (c) 2024 Nikita Ermakov <sh1r4s3@mail.si-head.nl>
  * SPDX-License-Identifier: MIT
  */
-
+#include "device/usbd.h"
 #include "usb.h"
 
 #include <esp_log.h>
@@ -52,6 +52,11 @@ static const uint8_t hid_configuration_descriptor[] = {
 
 static void usb_callback() {
     ESP_LOGI(TAG, "USB callback");
+    if (tud_mounted()) {
+        ESP_LOGI(TAG, "USB mounted");
+        tud_remote_wakeup();
+    }
+    tud_remote_wakeup();
 }
 
 void (*usb_get_callback(void))(void) {
@@ -70,6 +75,11 @@ void usb_init() {
     };
 
     ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
+
+    if (tud_mounted()) {
+        ESP_LOGI(TAG, "USB mounted");
+        tud_hid_keyboard_report(HID_ITF_PROTOCOL_KEYBOARD, 0, NULL);
+    }
     ESP_LOGI(TAG, "USB initialized");
 }
 
