@@ -26,9 +26,9 @@ const uint8_t hid_report_descriptor[] = {
 // USB HID configuration
 const char *hid_string_descriptor[5] = {
     // array of pointer to string descriptors
-    (char[]){0x09, 0x04},       // Is supported language is English (0x0409)
+    (char[]){0x09, 0x04},      // Is supported language is English (0x0409)
     "sh1r4s3",                 // Manufacturer
-    "vkeyboard",               // Product
+    "HID Keyboard Device",     // Product
     "424242",                  // Serials, should use chip ID
     "Virtual ESP32 keyboard"   // HID
 };
