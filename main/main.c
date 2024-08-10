@@ -8,6 +8,9 @@
 #include "usb.h"
 #include "http.h"
 
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+
 static const char * TAG = "RKW_MAIN";
 
 void app_main() {
@@ -15,5 +18,6 @@ void app_main() {
     wifi_init();
     usb_init();
     http_init(usb_get_callback());
-    usb_hid_wakeup_loop();
+    // Loop forever
+    vTaskSuspend(NULL);
 }

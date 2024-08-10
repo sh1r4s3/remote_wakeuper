@@ -94,15 +94,6 @@ int usb_send_data(uint8_t keycode) {
     return 0;
 }
 
-void usb_hid_wakeup_loop() {
-    while (1) {
-        if (tud_mounted()) {
-            tud_remote_wakeup();
-        }
-        vTaskDelay(WAKEUP_LOOP_DELAY);
-    }
-}
-
 /* Invoked when received GET HID REPORT DESCRIPTOR request.
  * Application return pointer to descriptor, whose contents must exist long enough for transfer to complete. */
 uint8_t const *tud_hid_descriptor_report_cb(uint8_t instance) {
