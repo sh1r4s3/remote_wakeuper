@@ -41,3 +41,19 @@ menu "WiFi configuration"
     endchoice
 
 endmenu
+
+menu "HTTP server settings"
+
+    config HTTP_SERVER_PORT
+        int "HTTP server port"
+        default 80
+        help
+            Port to listen to incoming HTTP connections
+
+    config HTTP_SERVER_URI
+        string "HTTP Server URI for GET"
+        default "/"
+        help
+            A URI to trigger USB wakeup callback
+
+endmenu

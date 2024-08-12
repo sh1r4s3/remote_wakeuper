@@ -9,14 +9,14 @@
 
 static const char * TAG = "RKW_HTTP";
 
-static esp_err_t uri_root_handler(httpd_req_t * request);
+static esp_err_t uri_handler(httpd_req_t * request);
 
 static httpd_handle_t g_server_handle = NULL;
 static httpd_uri_t g_get_uris[] = {
     {
-        .uri      = "/",
+        .uri      = CONFIG_HTTP_SERVER_URI,
         .method   = HTTP_GET,
-        .handler  = uri_root_handler,
+        .handler  = uri_handler,
         .user_ctx = NULL
     }
 };
@@ -27,6 +27,7 @@ void http_init(void (*pfn)(void)) {
     ESP_LOGI(TAG, "Starting HTTP server");
     // Get the default HTTP server configuration
     httpd_config_t http_config = HTTPD_DEFAULT_CONFIG();
+    http_config.server_port = CONFIG_HTTP_SERVER_PORT;
 
     // Register a USB callback
     if (pfn) {
@@ -46,9 +47,9 @@ void http_init(void (*pfn)(void)) {
     }
 }
 
-esp_err_t uri_root_handler(httpd_req_t * request) {
+esp_err_t uri_handler(httpd_req_t * request) {
     const char * response = "Processed";
-    ESP_LOGI(TAG, "got a request for /");
+    ESP_LOGI(TAG, "got a request for %s", request->uri);
     httpd_resp_send(request, response, HTTPD_RESP_USE_STRLEN);
     usb_callback();
     return ESP_OK;
