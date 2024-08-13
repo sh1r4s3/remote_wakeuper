@@ -14,7 +14,7 @@
 static const char * TAG = "RKW_MAIN";
 
 void app_main() {
-    ESP_LOGI(TAG, "Virtual remote keyboard is welcoming you!");
+    ESP_LOGI(TAG, "remote_wakeuper has started");
     wifi_init();
     usb_init();
     http_init(usb_get_callback());
